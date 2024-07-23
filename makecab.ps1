@@ -6,11 +6,11 @@ param(
  [string] $outFile #output file name
 )
 
-if ($folder.EndsWith("\") -eq $false){
-   $folder += "\"
-}
+$ErrorActionPreference = "Stop"
+$folder = (Get-Item $folder).FullName + "\"
+
 ".Set MaxDiskSize=0" | Out-File .\temp.ddf  -Encoding ASCII
-$files = get-childitem $folder -Recurse | where { $_.Attributes -ne "Directory"}
+$files = get-childitem $folder -Recurse | where { $_.Attributes -notlike "*Directory*"}
 foreach ($file in $files)
 {
   $destPath = $file.FullName.Replace($folder, "")
